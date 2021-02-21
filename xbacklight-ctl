@@ -1,0 +1,81 @@
+#!/bin/bash
+
+configfile=$XDG_CONFIG_HOME/xbacklight-ctl/rc.cfg
+
+if [ -z ${XDG_CONFIG_HOME+x} ]; then
+	configfile=$HOME/.config/xbacklight-ctl/rc.cfg; 
+fi
+
+[ -f $configfile ] || touch $configfile
+
+configfile_secured=/tmp/xbacklight-ctl.cfg
+
+# check if the file contains something we don't want
+if egrep -q -v '^#|^[^ ]*=[^;]*' "$configfile"; then
+  echo "You can only set variables in your rc.cfg" >&2
+  # filter the original to a new file
+  egrep '^#|^[^ ]*=[^;&]*'  "$configfile" > "$configfile_secured"
+  configfile="$configfile_secured"
+fi
+
+source $configfile
+
+backlight_up () {
+	[ -z $PERC ] && PERC=10
+	[ -z $MAX ] && MAX=100
+  [ $MAX -gt 100 ] && MAX=100
+	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
+
+	if [ $(($CURR_PERC+$PERC)) -gt $MAX ]; then
+		local NEW_PERC=$MAX
+		xbacklight -set $MAX 
+		notify-send "Backlight up" "<b>$MAX%</b>" -u normal -t 500 -i weather-clear-night -a xbacklight-ctl --hint=int:transient:1
+	else
+		local NEW_PERC=$(($CURR_PERC+$PERC))
+		xbacklight -inc $PERC 
+		notify-send "Backlight up" "<b>$NEW_PERC%</b>" -u normal -t 500 -i weather-clear-night -a xbacklight-ctl --hint=int:transient:1
+	fi
+}
+
+backlight_down () {
+	[ -z $PERC ] && PERC=10
+	[ -z $MIN ] && MIN=10
+	[ $MIN -lt 0 ] && MIN=0
+	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
+
+	if [ $(($CURR_PERC-$PERC)) -lt $MIN ]; then
+		local NEW_PERC=10
+		xbacklight -set 10
+		notify-send "Backlight down" "<b>$MIN%</b>" -u normal -t 500 -i weather-clear-night -a xbacklight-ctl --hint=int:transient:1
+	else
+		local NEW_PERC=$(($CURR_PERC-$PERC))
+		xbacklight -dec $PERC 
+		notify-send "Backlight down $NEW_PERC%" "<b>$NEW_PERC%</b>" -u normal -t 500 -i weather-clear-night -a xbacklight-ctl --hint=int:transient:1
+	fi
+
+}
+
+backlight_max () {
+	xbacklight -inc 100
+  notify-send "Backlight set to max" -u normal -t 500 -i weather-clear -a xbacklight-ctl --hint=int:transient:1
+}
+
+
+usage () {
+	echo "Usage: xbacklight-ctl <up|down|max|help|-h|--help>"
+	echo "Config location: $configfile"
+}
+
+case "$1" in
+	up) backlight_up;;
+	down) backlight_down;;
+	max) backlight_max;;
+	help|-h|--help)
+		usage
+		exit
+	;;
+	*) 
+		usage 
+		exit 1
+	;;
+esac
