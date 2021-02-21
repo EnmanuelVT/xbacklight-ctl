@@ -6,7 +6,7 @@ if [ -z ${XDG_CONFIG_HOME+x} ]; then
 	configfile=$HOME/.config/xbacklight-ctl/rc.cfg; 
 fi
 
-[ -f $configfile ] || touch $configfile
+[ -f $configfile ] || mkdir -p "${configfile%/*}" && printf "PERC=10\\nMAX=100\\nMIN=10\\nNOTIFY=yes\n" > $configfile
 
 configfile_secured=/tmp/xbacklight-ctl.cfg
 
