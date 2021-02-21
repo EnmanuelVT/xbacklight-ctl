@@ -3,7 +3,7 @@
 configfile=$XDG_CONFIG_HOME/xbacklight-ctl/rc.cfg
 
 if [ -z ${XDG_CONFIG_HOME+x} ]; then
-	configfile=$HOME/.config/Xbacklight-ctl/rc.cfg; 
+	configfile=$HOME/.config/xbacklight-ctl/rc.cfg; 
 fi
 
 [ -f $configfile ] || touch $configfile
@@ -20,6 +20,10 @@ fi
 
 source $configfile
 
+quick_notification () {
+	notify-send "$1" "<b>$2</b>" -u normal -t 500 -i $3 -a xbacklight-ctl --hint=int:transient:1
+}
+
 backlight_up () {
 	[ -z $PERC ] && PERC=10
 	[ -z $MAX ] && MAX=100
@@ -29,11 +33,11 @@ backlight_up () {
 	if [ $(($CURR_PERC+$PERC)) -gt $MAX ]; then
 		local NEW_PERC=$MAX
 		xbacklight -set $NEW_PERC 
-		notify-send "Backlight up" "<b>$NEW_PERC%</b>" -u normal -t 500 -i weather-clear-night -a xbacklight-ctl --hint=int:transient:1
+	  quick_notification "Backlight up" "$NEW_PERC%" weather-clear
 	else
 		local NEW_PERC=$(($CURR_PERC+$PERC))
 		xbacklight -inc $PERC 
-		notify-send "Backlight up $PERC%" "<b>$NEW_PERC%</b>" -u normal -t 500 -i weather-clear-night -a xbacklight-ctl --hint=int:transient:1
+		quick_notification "Backlight up $PERC%" "$NEW_PERC%" weather-clear
 	fi
 }
 
@@ -46,18 +50,17 @@ backlight_down () {
 	if [ $(($CURR_PERC-$PERC)) -lt $MIN ]; then
 		local NEW_PERC=$MIN
 		xbacklight -set $NEW_PERC
-		notify-send "Backlight down" "<b>$NEW_PERC%</b>" -u normal -t 500 -i weather-clear-night -a xbacklight-ctl --hint=int:transient:1
+		quick_notification "Backlight down" "$NEW_PERC%" weather-clear
 	else
 		local NEW_PERC=$(($CURR_PERC-$PERC))
 		xbacklight -dec $PERC 
-		notify-send "Backlight down $PERC%" "<b>$NEW_PERC%</b>" -u normal -t 500 -i weather-clear-night -a xbacklight-ctl --hint=int:transient:1
+		quick_notification "Backlight down $PERC%" "$NEW_PERC%" weather-clear
 	fi
-
 }
 
 backlight_max () {
-	xbacklight -inc 100
-  notify-send "Backlight set to max" -u normal -t 500 -i weather-clear -a xbacklight-ctl --hint=int:transient:1
+	xbacklight -set 100
+	quick_notification "Backlight set to max" "" weather-clear
 }
 
 
