@@ -1,0 +1,44 @@
+.TH xbacklight-ctl
+
+.Sh NAME
+.B xbacklight-ctl
+- Use xbacklight easily from the command line or with keybindings.
+
+.SH SYNOPSIS
+.B xbacklight-ctl
+.RB [option1]
+
+.SH DESCRIPTION
+.B xbacklight-ctl
+This script can set your backlight to the maximum, increase it or decrease it. 
+You can easily configure it in ~/.config/xbacklight-ctl/rc.cfg or in $XDG_CONFIG_HOME/xbacklight-ctl/rc.cfg .
+
+.SH OPTIONS
+
+.TP 
+\fBup\f1
+Increases backlight by $PERC
+
+.TP 
+\fBdown\f1
+Decreases backlight by $PERC
+
+.TP  
+\fBmax\f1
+Sets backlight to 100
+
+.TP
+\fB-h|--help\f1
+Prints help
+
+.SH FILES
+.TP
+.I
+$XDG_CONFIG_HOME/xbacklight-ctl/rc.cfg
+.TP
+.I
+/usr/bin/xbacklight-ctl
+
+.SH AUTHOR
+.PP
+Emmanuel Villavizar Trinidad <evillavizartrinidad@gmail.com>
