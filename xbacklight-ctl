@@ -21,13 +21,14 @@ fi
 source $configfile
 
 quick_notification () {
-	notify-send "$1" "<b>$2</b>" -u normal -t 500 -i $3 -a xbacklight-ctl --hint=int:transient:1
+	[ $NOTIFY = "yes" ] && notify-send "$1" "<b>$2</b>" -u normal -t 500 -i $3 -a xbacklight-ctl --hint=int:transient:1
 }
 
 backlight_up () {
 	[ -z $PERC ] && PERC=10
 	[ -z $MAX ] && MAX=100
   [ $MAX -gt 100 ] && MAX=100
+	[ -z $NOTIFY ] && NOTIFY=yes
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
 
 	if [ $(($CURR_PERC+$PERC)) -gt $MAX ]; then
@@ -45,6 +46,7 @@ backlight_down () {
 	[ -z $PERC ] && PERC=10
 	[ -z $MIN ] && MIN=10
 	[ $MIN -lt 0 ] && MIN=0
+	[ -z $NOTIFY ] && NOTIFY=yes
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
 
 	if [ $(($CURR_PERC-$PERC)) -lt $MIN ]; then
