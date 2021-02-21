@@ -61,7 +61,7 @@ backlight_down () {
 }
 
 backlight_max () {
-	xbacklight -set 100
+	xbacklight -set $MAX
 	quick_notification "Backlight set to max" "" weather-clear
 }
 
