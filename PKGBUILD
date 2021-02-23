@@ -31,6 +31,7 @@ package() {
   cd $pkgname
   install -Dm755 xbacklight-ctl "${pkgdir}/usr/bin/xbacklight-ctl"
   install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "${pkgdir}/usr/share/doc/$pkgname/README.md"
   cd doc
   install -Dm644 xbacklight-ctl.1.gz "${pkgdir}/usr/share/man/man1/xbacklight-ctl.1.gz"
   cd ..
