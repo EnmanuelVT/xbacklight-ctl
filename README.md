@@ -2,6 +2,8 @@
 
 Manage your brightness and get desktop notification feedback with this simple script. It's a good idea to map this script to keys in your WM or DE. You can search how to set XF86BrightnessUp and XF86BrightnessDown in your WM.
 
+<img src="https://github.com/EnmanuelVT/xbacklight-ctl/blob/main/doc/xbacklight-ctl-notifications.gif" width="600">
+
 ```
 xbacklight-ctl up    # Increase brightness by 10% (configurable)
 xbacklight-ctl down  # Decrease brightness by 10% (configurable)
