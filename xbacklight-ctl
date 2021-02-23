@@ -36,8 +36,8 @@ backlight_up () {
 	[ $(($CURR_PERC+$PERC)) -gt $MAX ] && local PERC=$(($MAX-$CURR_PERC))
 	local NEW_PERC=$(($CURR_PERC+$PERC))
 
-	xbacklight -inc $PERC 
 	quick_notification "Backlight up $PERC%" "$NEW_PERC%" weather-clear
+	xbacklight -inc $PERC 
 }
 
 backlight_down () {
@@ -50,18 +50,18 @@ backlight_down () {
 	[ $(($CURR_PERC-$PERC)) -lt $MIN ] && local PERC=$(($CURR_PERC-$MIN))
 	local NEW_PERC=$(($CURR_PERC-$PERC))
 
-	xbacklight -dec $PERC 
 	quick_notification "Backlight down $PERC%" "$NEW_PERC%" weather-clear-night
+	xbacklight -dec $PERC 
 }
 
 backlight_max () {
-	xbacklight -set $MAX
 	quick_notification "Backlight set to max" "" weather-clear
+	xbacklight -set $MAX
 }
 
 backlight_min () {
-	xbacklight -set $MIN
 	quick_notification "Backlight set to min" "" weather-clear-night
+	xbacklight -set $MIN
 }
 
 usage () {
