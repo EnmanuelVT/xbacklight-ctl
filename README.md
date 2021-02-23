@@ -6,6 +6,7 @@ Manage your brightness and get desktop notification feedback with this simple sc
 xbacklight-ctl up    # Increase brightness by 10% (configurable)
 xbacklight-ctl down  # Decrease brightness by 10% (configurable)
 xbacklight-ctl max   # Set max brightness (configurable)
+xbacklight-ctl min   # Set min brightness (configurable)
 ```
 
 Your brightness it's never going to be lower than your min brightness, so you won't get a black screen if you accidentally set your backlight to 0.

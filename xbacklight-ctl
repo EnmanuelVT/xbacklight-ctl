@@ -59,9 +59,13 @@ backlight_max () {
 	quick_notification "Backlight set to max" "" weather-clear
 }
 
+backlight_min () {
+	xbacklight -set $MIN
+	quick_notification "Backlight set to min" "" weather-clear-night
+}
 
 usage () {
-	echo "Usage: xbacklight-ctl <up|down|max|help|-h|--help>"
+	echo "Usage: xbacklight-ctl <up|down|max|min|help|-h|--help>"
 	echo "Config location: $configfile"
 }
 
@@ -69,6 +73,7 @@ case "$1" in
 	up) backlight_up;;
 	down) backlight_down;;
 	max) backlight_max;;
+	min) backlight_min;;
 	help|-h|--help)
 		usage
 		exit
