@@ -29,7 +29,7 @@ quick_notification () {
 backlight_up () {
 	[ -z $PERC ] && PERC=10
 	[ -z $MAX ] && MAX=100
-  [ $MAX -gt 100 ] && MAX=100
+	[ $MAX -gt 100 ] && MAX=100
 	[ -z $NOTIFY ] && NOTIFY=yes
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
 	[ $(($CURR_PERC+$PERC)) -gt $MAX ] && local PERC=$(($MAX-$CURR_PERC))
