@@ -11,6 +11,17 @@ xbacklight-ctl min   # Set min brightness (configurable)
 
 Your brightness it's never going to be lower than your min brightness, so you won't get a black screen if you accidentally set your backlight to 0.
 
+## Installation
+
+Use your favorite AUR helper
+
+```
+yay -S xbacklight-ctl-git
+pacaur -S xbacklight-ctl-git
+```
+
+Or install it manually with the PKGBUILD and `makepkg -si`, I'm pretty sure that you know what you are doing.
+
 ## Configuration
 
 Your configuration file it's located in $XDG_CONFIG_HOME/xbacklight-ctl/rc.cfg (~/.config/xbacklight-ctl/rc.cfg).
