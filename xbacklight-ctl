@@ -29,12 +29,13 @@ quick_notification () {
 backlight_up () {
 	[ -z $PERC ] && PERC=10
 	[ -z $MAX ] && MAX=100
-	[ $MAX -gt 100 ] && MAX=100
 	[ -z $NOTIFY ] && NOTIFY=yes
+	[ $MAX -gt 100 ] && MAX=100
+
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
 	[ $(($CURR_PERC+$PERC)) -gt $MAX ] && local PERC=$(($MAX-$CURR_PERC))
-
 	local NEW_PERC=$(($CURR_PERC+$PERC))
+
 	xbacklight -inc $PERC 
 	quick_notification "Backlight up $PERC%" "$NEW_PERC%" weather-clear
 }
@@ -42,12 +43,13 @@ backlight_up () {
 backlight_down () {
 	[ -z $PERC ] && PERC=10
 	[ -z $MIN ] && MIN=10
-	[ $MIN -lt 0 ] && MIN=0
 	[ -z $NOTIFY ] && NOTIFY=yes
+	[ $MIN -lt 0 ] && MIN=0
+	
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
-
 	[ $(($CURR_PERC-$PERC)) -lt $MIN ] && local PERC=$(($CURR_PERC-$MIN))
 	local NEW_PERC=$(($CURR_PERC-$PERC))
+
 	xbacklight -dec $PERC 
 	quick_notification "Backlight down $PERC%" "$NEW_PERC%" weather-clear-night
 }
