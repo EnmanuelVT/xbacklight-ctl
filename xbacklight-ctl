@@ -5,7 +5,7 @@ configfile=$XDG_CONFIG_HOME/xbacklight-ctl/rc.cfg
 
 make_config () {
 	mkdir -p "${configfile%/*}" 
-	printf "PERC=10\\nMAX=100\\nMIN=10\\nNOTIFY=yes\n" > $configfile
+	printf "PERC=10\\nMAX=100\\nMIN=10\\nTIME=100\\nSTEPS=20\\nNOTIFY=yes\\n" > $configfile
 }
 
 [ -f $configfile ] || make_config
@@ -22,46 +22,62 @@ fi
 
 source $configfile
 
+set_defaults () {
+	[ -z $MAX ] && MAX=100
+	[ $MAX -gt 100 ] && MAX=100
+
+	[ -z $MIN ] && MIN=10
+	[ $MIN -lt 0 ] && MIN=0
+
+	[ -z $PERC ] && PERC=10
+
+	[ -z $TIME ] && TIME=100
+	[ $TIME -lt 0 ] && TIME=100
+
+	[ -z $STEPS ] && STEPS=20
+	[ $STEPS -lt 0 ] && STEPS=20
+
+	[ -z $NOTIFY ] && NOTIFY=yes
+}
+
 quick_notification () {
 	[ $NOTIFY = "yes" ] && notify-send "$1" "<b>$2</b>" -u normal -t 500 -i $3 -a xbacklight-ctl --hint=int:transient:1
 }
 
 backlight_up () {
-	[ -z $PERC ] && PERC=10
-	[ -z $MAX ] && MAX=100
-	[ -z $NOTIFY ] && NOTIFY=yes
-	[ $MAX -gt 100 ] && MAX=100
+	set_defaults
 
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
 	[ $(($CURR_PERC+$PERC)) -gt $MAX ] && local PERC=$(($MAX-$CURR_PERC))
 	local NEW_PERC=$(($CURR_PERC+$PERC))
 
 	quick_notification "Backlight up $PERC%" "$NEW_PERC%" weather-clear
-	xbacklight -inc $PERC 
+	xbacklight -inc $PERC -time $TIME -steps $STEPS
 }
 
 backlight_down () {
-	[ -z $PERC ] && PERC=10
-	[ -z $MIN ] && MIN=10
-	[ -z $NOTIFY ] && NOTIFY=yes
-	[ $MIN -lt 0 ] && MIN=0
-	
+	set_defaults
+
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
 	[ $(($CURR_PERC-$PERC)) -lt $MIN ] && local PERC=$(($CURR_PERC-$MIN))
 	local NEW_PERC=$(($CURR_PERC-$PERC))
 
 	quick_notification "Backlight down $PERC%" "$NEW_PERC%" weather-clear-night
-	xbacklight -dec $PERC 
+	xbacklight -dec $PERC -time $TIME -steps $STEPS
 }
 
 backlight_max () {
+	set_defaults
+
 	quick_notification "Backlight set to max" "" weather-clear
-	xbacklight -set $MAX
+	xbacklight -set $MAX -time $TIME -steps $STEPS
 }
 
 backlight_min () {
+	set_defaults
+
 	quick_notification "Backlight set to min" "" weather-clear-night
-	xbacklight -set $MIN
+	xbacklight -set $MIN -time $TIME -steps $STEPS
 }
 
 usage () {

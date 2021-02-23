@@ -34,6 +34,10 @@ PERC=10
 MAX=100
 # If you set this to 0, you will get a black screen when you reach the minimum brightness.
 MIN=10
+# Length of time to spend fading the backlight between old and new value.
+TIME=100
+# Number of steps to take while fading.
+STEPS=20
 # Receive desktop notifications with notify-send.
 NOTIFY=yes
 ```
