@@ -41,7 +41,9 @@ set_defaults () {
 }
 
 quick_notification () {
-	[ $NOTIFY = "yes" ] && notify-send "$1" "<b>$2</b>" -u normal -t 500 -i $3 -a xbacklight-ctl --hint=int:transient:1
+	NOT_FILE=/tmp/xbacklight-ctl-notification
+
+	notify-send.sh "$1" "<b>$2</b>" -u normal -t 500 -i $3 -a xbacklight-ctl --hint=int:transient:1 -R $NOT_FILE
 }
 
 backlight_up () {
