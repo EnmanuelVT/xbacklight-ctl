@@ -13,15 +13,13 @@ makedepends=('git'
              'gzip')
 optdepends=()
 provides=(xbacklight-ctl)
-conflicts=()
-replaces=()
-backup=()
-options=()
-install=
-changelog=
 source=("git+$url")
-noextract=()
 md5sums=('SKIP') #autofill using updpkgsums
+
+pkgver() {
+  cd "$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
 
 prepare() {
   cd $pkgname/doc
