@@ -5,10 +5,11 @@ Manage your brightness and get desktop notification feedback with this simple sc
 <img src="https://github.com/EnmanuelVT/xbacklight-ctl/blob/main/doc/xbacklight-ctl-notifications.gif" width="600">
 
 ```
-xbacklight-ctl up    # Increase brightness by 10% (configurable)
-xbacklight-ctl down  # Decrease brightness by 10% (configurable)
-xbacklight-ctl max   # Set max brightness (configurable)
-xbacklight-ctl min   # Set min brightness (configurable)
+xbacklight-ctl up       # Increase brightness by 10% (configurable)
+xbacklight-ctl down     # Decrease brightness by 10% (configurable)
+xbacklight-ctl max      # Set max brightness (configurable)
+xbacklight-ctl min      # Set min brightness (configurable)
+xbacklight-ctl set 50   # Set brightness to 50 percent 
 ```
 
 Your brightness it's never going to be lower than your min brightness, so you won't get a black screen if you accidentally set your backlight to 0.

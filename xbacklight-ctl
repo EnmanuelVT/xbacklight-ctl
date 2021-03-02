@@ -22,6 +22,12 @@ fi
 
 source $configfile
 
+usage () {
+	echo "Usage: xbacklight-ctl <up|down|set percent|max|min|help|-h|--help>"
+	echo "Config location: $configfile"
+}
+
+
 set_defaults () {
 	[ -z $MAX ] && MAX=100
 	[ $MAX -gt 100 ] && MAX=100
@@ -82,9 +88,13 @@ backlight_min () {
 	xbacklight -set $MIN -time $TIME -steps $STEPS
 }
 
-usage () {
-	echo "Usage: xbacklight-ctl <up|down|max|min|help|-h|--help>"
-	echo "Config location: $configfile"
+backlight_set () {
+	[ -z $1 ] && echo "Please specify a percent" && notify-send.sh "xbacklight-ctl error: percent not specified" && exit 1
+
+	set_defaults
+
+	quick_notification "Backlight set to" "$1%" weather-clear
+	xbacklight -set $1 -time $TIME -steps $STEPS
 }
 
 case "$1" in
@@ -92,6 +102,7 @@ case "$1" in
 	down) backlight_down;;
 	max) backlight_max;;
 	min) backlight_min;;
+	set) backlight_set $2;;
 	help|-h|--help)
 		usage
 		exit
