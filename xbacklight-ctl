@@ -1,22 +1,22 @@
 #!/bin/bash
 
 configfile=$XDG_CONFIG_HOME/xbacklight-ctl/rc.cfg
-[ -z ${XDG_CONFIG_HOME+x} ] && configfile=$HOME/.config/xbacklight-ctl/rc.cfg; 
+[[ -z ${XDG_CONFIG_HOME+x} ]] && configfile=$HOME/.config/xbacklight-ctl/rc.cfg; 
 
 make_config () {
 	mkdir -p "${configfile%/*}" 
 	printf "PERC=10\\nMAX=100\\nMIN=10\\nTIME=100\\nSTEPS=20\\nNOTIFY=yes\\n" > $configfile
 }
 
-[ -f $configfile ] || make_config
+[[ -f $configfile ]] || make_config
 
 configfile_secured=/tmp/xbacklight-ctl.cfg
 
 # Check if file contains something that is not a variable
-if egrep -q -v '^#|^[^ ]*=[^;]*' "$configfile"; then
+if egrep -q -v '^#|^[[^ ]]*=[[^;]]*' "$configfile"; then
 	echo "You can only set variables in your rc.cfg" >&2
 	# Filter all commands that are not a variable
-	egrep '^#|^[^ ]*=[^;&]*'  "$configfile" > "$configfile_secured"
+	egrep '^#|^[[^ ]]*=[[^;&]]*'  "$configfile" > "$configfile_secured"
 	configfile="$configfile_secured"
 fi
 
@@ -29,21 +29,21 @@ usage () {
 
 
 set_defaults () {
-	[ -z $MAX ] && MAX=100
-	[ $MAX -gt 100 ] && MAX=100
+	[[ -z $MAX ]] && MAX=100
+	[[ $MAX -gt 100 ]] && MAX=100
 
-	[ -z $MIN ] && MIN=10
-	[ $MIN -lt 0 ] && MIN=0
+	[[ -z $MIN ]] && MIN=10
+	[[ $MIN -lt 0 ]] && MIN=0
 
-	[ -z $PERC ] && PERC=10
+	[[ -z $PERC ]] && PERC=10
 
-	[ -z $TIME ] && TIME=100
-	[ $TIME -lt 0 ] && TIME=100
+	[[ -z $TIME ]] && TIME=100
+	[[ $TIME -lt 0 ]] && TIME=100
 
-	[ -z $STEPS ] && STEPS=20
-	[ $STEPS -lt 0 ] && STEPS=20
+	[[ -z $STEPS ]] && STEPS=20
+	[[ $STEPS -lt 0 ]] && STEPS=20
 
-	[ -z $NOTIFY ] && NOTIFY=yes
+	[[ -z $NOTIFY ]] && NOTIFY=yes
 }
 
 quick_notification () {
@@ -56,7 +56,7 @@ backlight_up () {
 	set_defaults
 
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
-	[ $(($CURR_PERC+$PERC)) -gt $MAX ] && local PERC=$(($MAX-$CURR_PERC))
+	[[ $(($CURR_PERC+$PERC)) -gt $MAX ]] && local PERC=$(($MAX-$CURR_PERC))
 	local NEW_PERC=$(($CURR_PERC+$PERC))
 
 	quick_notification "Backlight up $PERC%" "$NEW_PERC%" weather-clear
@@ -67,7 +67,7 @@ backlight_down () {
 	set_defaults
 
 	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
-	[ $(($CURR_PERC-$PERC)) -lt $MIN ] && local PERC=$(($CURR_PERC-$MIN))
+	[[ $(($CURR_PERC-$PERC)) -lt $MIN ]] && local PERC=$(($CURR_PERC-$MIN))
 	local NEW_PERC=$(($CURR_PERC-$PERC))
 
 	quick_notification "Backlight down $PERC%" "$NEW_PERC%" weather-clear-night
@@ -89,7 +89,7 @@ backlight_min () {
 }
 
 backlight_set () {
-	[ -z $1 ] && echo "Please specify a percent" && notify-send.sh "xbacklight-ctl error: percent not specified" && exit 1
+	[[ -z $1 ]] && echo "Please specify a percent" && notify-send.sh "xbacklight-ctl error: percent not specified" && exit 1
 
 	set_defaults
 
