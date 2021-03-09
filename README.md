@@ -7,6 +7,8 @@ Manage your brightness and get desktop notification feedback with this simple sc
 ```
 xbacklight-ctl up       # Increase brightness by 10% (configurable)
 xbacklight-ctl down     # Decrease brightness by 10% (configurable)
+xbacklight-ctl up 30    # Increase brightness by 30%
+xbacklight-ctl down 80  # Decrease brightness by 80%
 xbacklight-ctl max      # Set max brightness (configurable)
 xbacklight-ctl min      # Set min brightness (configurable)
 xbacklight-ctl set 50   # Set brightness to 50 percent 

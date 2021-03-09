@@ -16,12 +16,14 @@ You can easily configure it in ~/.config/xbacklight-ctl/rc.cfg or in $XDG_CONFIG
 .SH OPTIONS
 
 .TP 
-\fBup\f1
-Increases backlight by $PERC
+\fBup [percent]\f1
+Increases backlight by percent, if percent is not given, it will use the
+variable $PERC in your configuration file, if there isn't one, then it will
+default to 10
 
 .TP 
-\fBdown\f1
-Decreases backlight by $PERC
+\fBdown [percent]\f1
+Same as up but decreases backlight
 
 .TP  
 \fBmax\f1
