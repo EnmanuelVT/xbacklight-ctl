@@ -13,10 +13,10 @@ make_config () {
 configfile_secured=/tmp/xbacklight-ctl.cfg
 
 # Check if file contains something that is not a variable
-if egrep -q -v '^#|^[[^ ]]*=[[^;]]*' "$configfile"; then
+if egrep -q -v '^#|^[^ ]*=[^;]*' "$configfile"; then
 	echo "You can only set variables in your rc.cfg" >&2
 	# Filter all commands that are not a variable
-	egrep '^#|^[[^ ]]*=[[^;&]]*'  "$configfile" > "$configfile_secured"
+	egrep '^#|^[^ ]*=[^;&]*'  "$configfile" > "$configfile_secured"
 	configfile="$configfile_secured"
 fi
 
