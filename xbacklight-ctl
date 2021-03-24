@@ -27,7 +27,6 @@ usage () {
 	echo "Config location: $configfile"
 }
 
-
 set_defaults () {
 	[[ -z $MAX ]] && MAX=100
 	[[ $MAX -gt 100 ]] && MAX=100
@@ -46,10 +45,39 @@ set_defaults () {
 	[[ -z $NOTIFY ]] && NOTIFY=yes
 }
 
+perctoprogressbar () {
+	[[ -z $1 ]] && echo "Missing percent" && exit 1
+	[[ -z $(echo $1 | grep '%$' ) ]] && echo "Put a % at the end" && exit 1
+	[[ ${1%\%} -gt 100 ]] && echo "The percent can't be greater than 100%" && exit 1
+
+	char1=${2//[[:blank:]]/}
+	char2=${3//[[:blank:]]/}
+
+	[[ -z $char1 ]] && char1="■"
+	[[ -z $char2 ]] && char2="□"
+
+	# Integer from 1 to 10
+	progress=$(echo $1 | cut -d'%' -f 1 | xargs -I {} echo {}/10 | bc)
+
+	string=""
+
+	while [[ ${#string} -lt 10 ]]; do
+	  [[ ${#string} -lt $progress ]] && string+="$char1" || string+="$char2"
+	done
+
+	echo "$string $1"
+}
+
 quick_notification () {
 	NOT_FILE=/tmp/xbacklight-ctl-notification
 
-	notify-send.sh "$1" "<b>$2</b>" -u normal -t 500 -i $3 -a xbacklight-ctl --hint=int:transient:1 -R $NOT_FILE
+	notify-send.sh "$1" "$(perctoprogressbar $2)" -u normal -t 500 -i $3 -a xbacklight-ctl --hint=int:transient:1 -R $NOT_FILE
+}
+
+notify-error () {
+	local str="xbacklight-ctl error: $1"
+	echo "$str"
+	notify-send "$str"
 }
 
 backlight_up () {
@@ -81,19 +109,20 @@ backlight_down () {
 backlight_max () {
 	set_defaults
 
-	quick_notification "Backlight set to max" "" weather-clear
+	quick_notification "Backlight set to max" "$MAX%" weather-clear
 	xbacklight -set $MAX -time $TIME -steps $STEPS
 }
 
 backlight_min () {
 	set_defaults
 
-	quick_notification "Backlight set to min" "" weather-clear-night
+	quick_notification "Backlight set to min" "$MIN%" weather-clear-night
 	xbacklight -set $MIN -time $TIME -steps $STEPS
 }
 
 backlight_set () {
-	[[ -z $1 ]] && echo "Please specify a percent" && notify-send.sh "xbacklight-ctl error: percent not specified" && exit 1
+	[[ -z $1 ]] && notify-error "percent not specified" && exit 1
+	[[ $1 -gt 100 ]] && notify-error "percent can't be higher than 100%" exit 1
 
 	set_defaults
 
