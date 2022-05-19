@@ -85,7 +85,7 @@ backlight_up () {
 
 	local PERC=${1:-$PERC}
 
-	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
+	local CURR_PERC=`xbacklight -get`
 	[[ $(($CURR_PERC+$PERC)) -gt $MAX ]] && local PERC=$(($MAX-$CURR_PERC))
 	local NEW_PERC=$(($CURR_PERC+$PERC))
 
@@ -98,7 +98,7 @@ backlight_down () {
 
 	local PERC=${1:-$PERC}
 
-	local CURR_PERC=`xbacklight | sed "s/\..*//g"`
+	local CURR_PERC=`xbacklight -get`
 	[[ $(($CURR_PERC-$PERC)) -lt $MIN ]] && local PERC=$(($CURR_PERC-$MIN))
 	local NEW_PERC=$(($CURR_PERC-$PERC))
 
